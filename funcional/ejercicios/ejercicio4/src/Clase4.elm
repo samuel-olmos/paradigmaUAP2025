@@ -10,6 +10,7 @@ Temas:
 - Mónada Result para manejo de errores
 - Composición monádica con andThen
 -}
+import Dict exposing (values)
 
 
 -- ============================================================================
@@ -81,9 +82,11 @@ esHoja arbol =
 -- ============================================================================
 
 
-esHoja : Tree a -> Bool
-esHoja arbol =
-    
+-- esHoja : Tree a -> Bool
+-- esHoja arbol =
+--     case arbol of
+--         Node _ Empty Empty -> True
+--         _ -> False
 
 
 -- ============================================================================
@@ -94,7 +97,7 @@ esHoja arbol =
 -- 4. Tamaño del Árbol
 
 
-tamaño : Tree a -> Int
+tamaño: Tree a -> Int
 tamaño arbol =
     case arbol of
         Empty ->
@@ -215,18 +218,25 @@ encontrarMinimo arbol =
         Empty -> Nothing
         Node v Empty Empty -> Just v
         Node v izq der -> case ((encontrarMinimo izq), (encontrarMinimo der)) of
-            Nothing, Nothing -> Just v
-            Just minIzq, Nothing -> Just (min v minIzq)
-            Nothing, Just minDer -> Just (min v minDer)
-            Just minIzq, Just minDer -> Just (min v (min minIzq minDer))
+            (Nothing, Nothing) -> Just v
+            (Just minIzq, Nothing) -> Just (min v minIzq)
+            (Nothing, Just minDer) -> Just (min v minDer)
+            (Just minIzq, Just minDer) -> Just (min v (min minIzq minDer))
 
 
 -- 13. Encontrar Máximo (con Maybe)
 
 
-encontrarMaximo : Tree comparable -> Maybe comparable
+encontrarMaximo : Tree comparable -> Maybe comparable -- comparable: tipo que se puede comparar (<, >, =)
 encontrarMaximo arbol =
-    Nothing
+    case arbol of
+        Empty -> Nothing
+        Node v Empty Empty -> Just v
+        Node v izq der -> case ((encontrarMaximo izq), (encontrarMaximo der)) of
+            (Nothing, Nothing) -> Just v
+            (Just maxIzq, Nothing) -> Just (max v maxIzq)
+            (Nothing, Just maxDer) -> Just (max v maxDer)
+            (Just maxIzq, Just maxDer) -> Just (max v (max maxIzq maxDer))
 
 
 -- 14. Buscar Por Predicado
@@ -234,8 +244,17 @@ encontrarMaximo arbol =
 
 buscarPor : (a -> Bool) -> Tree a -> Maybe a
 buscarPor predicado arbol =
-    Nothing
-
+    case arbol of
+        Empty -> Nothing
+        Node v Empty Empty -> if (predicado v ) then Just v else Nothing
+        Node v izq der ->
+            case buscarPor predicado izq of
+                Just encontrado -> Just encontrado
+                Nothing ->
+                    if (predicado v) then
+                        Just v
+                    else
+                        buscarPor predicado der
 
 -- 15. Obtener Valor de Raíz
 
@@ -256,12 +275,15 @@ hijoIzquierdo arbol =
         Empty -> Nothing
         Node _ Empty _ -> Nothing
         Node _ izq _ -> Just izq
-        
+
 
 
 hijoDerecho : Tree a -> Maybe (Tree a)
 hijoDerecho arbol =
-    Nothing
+    case arbol of
+        Empty -> Nothing
+        Node _ _ Empty -> Nothing
+        Node _ _ der -> Just der
 
 
 -- 17. Obtener Nieto
@@ -281,7 +303,9 @@ nietoIzquierdoIzquierdo arbol =
 
 obtenerSubarbol : a -> Tree a -> Maybe (Tree a)
 obtenerSubarbol valor arbol =
-    
+    case valor of
+        _ -> Nothing
+        
 
 
 buscarEnSubarbol : a -> a -> Tree a -> Maybe a
