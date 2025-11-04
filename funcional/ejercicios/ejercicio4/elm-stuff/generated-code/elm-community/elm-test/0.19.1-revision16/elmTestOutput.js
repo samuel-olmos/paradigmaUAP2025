@@ -7601,6 +7601,1493 @@ var $author$project$Test$Runner$Node$run = F2(
 				});
 		}
 	});
+var $author$project$Clase4$Derecha = {$: 'Derecha'};
+var $author$project$Clase4$Empty = {$: 'Empty'};
+var $author$project$Clase4$Izquierda = {$: 'Izquierda'};
+var $author$project$Clase4$Node = F3(
+	function (a, b, c) {
+		return {$: 'Node', a: a, b: b, c: c};
+	});
+var $author$project$Clase4$altura = function (arbol) {
+	if (arbol.$ === 'Empty') {
+		return 0;
+	} else {
+		var izq = arbol.b;
+		var der = arbol.c;
+		return A2(
+			$elm$core$Basics$max,
+			$author$project$Clase4$altura(izq),
+			$author$project$Clase4$altura(der)) + 1;
+	}
+};
+var $author$project$Clase4$arbolMediano = A3(
+	$author$project$Clase4$Node,
+	10,
+	A3(
+		$author$project$Clase4$Node,
+		5,
+		A3($author$project$Clase4$Node, 3, $author$project$Clase4$Empty, $author$project$Clase4$Empty),
+		A3($author$project$Clase4$Node, 7, $author$project$Clase4$Empty, $author$project$Clase4$Empty)),
+	A3(
+		$author$project$Clase4$Node,
+		15,
+		A3($author$project$Clase4$Node, 12, $author$project$Clase4$Empty, $author$project$Clase4$Empty),
+		A3($author$project$Clase4$Node, 20, $author$project$Clase4$Empty, $author$project$Clase4$Empty)));
+var $author$project$Clase4$arbolPequeno = A3(
+	$author$project$Clase4$Node,
+	3,
+	A3($author$project$Clase4$Node, 1, $author$project$Clase4$Empty, $author$project$Clase4$Empty),
+	A3($author$project$Clase4$Node, 5, $author$project$Clase4$Empty, $author$project$Clase4$Empty));
+var $author$project$Clase4$buscar = F2(
+	function (valor, arbol) {
+		buscar:
+		while (true) {
+			if (arbol.$ === 'Empty') {
+				return $elm$core$Maybe$Nothing;
+			} else {
+				var v = arbol.a;
+				var izq = arbol.b;
+				var der = arbol.c;
+				if (_Utils_eq(v, valor)) {
+					return $elm$core$Maybe$Just(v);
+				} else {
+					var _v1 = A2($author$project$Clase4$buscar, valor, izq);
+					if (_v1.$ === 'Just') {
+						var encontrado = _v1.a;
+						return $elm$core$Maybe$Just(encontrado);
+					} else {
+						var $temp$valor = valor,
+							$temp$arbol = der;
+						valor = $temp$valor;
+						arbol = $temp$arbol;
+						continue buscar;
+					}
+				}
+			}
+		}
+	});
+var $author$project$Clase4$buscarEnBST = F2(
+	function (valor, arbol) {
+		buscarEnBST:
+		while (true) {
+			if (arbol.$ === 'Empty') {
+				return $elm$core$Result$Err('El valor no se encuentra en el árbol');
+			} else {
+				var v = arbol.a;
+				var izq = arbol.b;
+				var der = arbol.c;
+				if (_Utils_eq(valor, v)) {
+					return $elm$core$Result$Ok(v);
+				} else {
+					if (_Utils_cmp(valor, v) < 0) {
+						var $temp$valor = valor,
+							$temp$arbol = izq;
+						valor = $temp$valor;
+						arbol = $temp$arbol;
+						continue buscarEnBST;
+					} else {
+						var $temp$valor = valor,
+							$temp$arbol = der;
+						valor = $temp$valor;
+						arbol = $temp$arbol;
+						continue buscarEnBST;
+					}
+				}
+			}
+		}
+	});
+var $author$project$Clase4$buscarPor = F2(
+	function (predicado, arbol) {
+		buscarPor:
+		while (true) {
+			if (arbol.$ === 'Empty') {
+				return $elm$core$Maybe$Nothing;
+			} else {
+				if ((arbol.b.$ === 'Empty') && (arbol.c.$ === 'Empty')) {
+					var v = arbol.a;
+					var _v1 = arbol.b;
+					var _v2 = arbol.c;
+					return predicado(v) ? $elm$core$Maybe$Just(v) : $elm$core$Maybe$Nothing;
+				} else {
+					var v = arbol.a;
+					var izq = arbol.b;
+					var der = arbol.c;
+					var _v3 = A2($author$project$Clase4$buscarPor, predicado, izq);
+					if (_v3.$ === 'Just') {
+						var encontrado = _v3.a;
+						return $elm$core$Maybe$Just(encontrado);
+					} else {
+						if (predicado(v)) {
+							return $elm$core$Maybe$Just(v);
+						} else {
+							var $temp$predicado = predicado,
+								$temp$arbol = der;
+							predicado = $temp$predicado;
+							arbol = $temp$arbol;
+							continue buscarPor;
+						}
+					}
+				}
+			}
+		}
+	});
+var $author$project$Clase4$contarHojas = function (arbol) {
+	if (arbol.$ === 'Empty') {
+		return 0;
+	} else {
+		if ((arbol.b.$ === 'Empty') && (arbol.c.$ === 'Empty')) {
+			var _v1 = arbol.b;
+			var _v2 = arbol.c;
+			return 1;
+		} else {
+			var izq = arbol.b;
+			var der = arbol.c;
+			return $author$project$Clase4$contarHojas(izq) + $author$project$Clase4$contarHojas(der);
+		}
+	}
+};
+var $author$project$Clase4$contiene = F2(
+	function (valor, arbol) {
+		if (arbol.$ === 'Empty') {
+			return false;
+		} else {
+			var v = arbol.a;
+			var izq = arbol.b;
+			var der = arbol.c;
+			return _Utils_eq(v, valor) || (A2($author$project$Clase4$contiene, valor, izq) || A2($author$project$Clase4$contiene, valor, der));
+		}
+	});
+var $author$project$Clase4$dividir = function (arbol) {
+	if (arbol.$ === 'Empty') {
+		return $elm$core$Result$Err('No se puede dividir un árbol vacío');
+	} else {
+		var v = arbol.a;
+		var izq = arbol.b;
+		var der = arbol.c;
+		return $elm$core$Result$Ok(
+			_Utils_Tuple3(v, izq, der));
+	}
+};
+var $author$project$Clase4$encontrarCamino = F2(
+	function (valor, arbol) {
+		var aux = function (tree) {
+			if (tree.$ === 'Empty') {
+				return $elm$core$Result$Err('El valor no existe en el árbol');
+			} else {
+				var v = tree.a;
+				var izq = tree.b;
+				var der = tree.c;
+				if (_Utils_eq(v, valor)) {
+					return $elm$core$Result$Ok(_List_Nil);
+				} else {
+					var _v1 = aux(izq);
+					if (_v1.$ === 'Ok') {
+						var caminoIzq = _v1.a;
+						return $elm$core$Result$Ok(
+							A2($elm$core$List$cons, $author$project$Clase4$Izquierda, caminoIzq));
+					} else {
+						var _v2 = aux(der);
+						if (_v2.$ === 'Ok') {
+							var caminoDer = _v2.a;
+							return $elm$core$Result$Ok(
+								A2($elm$core$List$cons, $author$project$Clase4$Derecha, caminoDer));
+						} else {
+							return $elm$core$Result$Err('El valor no existe en el árbol');
+						}
+					}
+				}
+			}
+		};
+		return aux(arbol);
+	});
+var $author$project$Clase4$encontrarMaximo = function (arbol) {
+	if (arbol.$ === 'Empty') {
+		return $elm$core$Maybe$Nothing;
+	} else {
+		if ((arbol.b.$ === 'Empty') && (arbol.c.$ === 'Empty')) {
+			var v = arbol.a;
+			var _v1 = arbol.b;
+			var _v2 = arbol.c;
+			return $elm$core$Maybe$Just(v);
+		} else {
+			var v = arbol.a;
+			var izq = arbol.b;
+			var der = arbol.c;
+			var _v3 = _Utils_Tuple2(
+				$author$project$Clase4$encontrarMaximo(izq),
+				$author$project$Clase4$encontrarMaximo(der));
+			if (_v3.a.$ === 'Nothing') {
+				if (_v3.b.$ === 'Nothing') {
+					var _v4 = _v3.a;
+					var _v5 = _v3.b;
+					return $elm$core$Maybe$Just(v);
+				} else {
+					var _v7 = _v3.a;
+					var maxDer = _v3.b.a;
+					return $elm$core$Maybe$Just(
+						A2($elm$core$Basics$max, v, maxDer));
+				}
+			} else {
+				if (_v3.b.$ === 'Nothing') {
+					var maxIzq = _v3.a.a;
+					var _v6 = _v3.b;
+					return $elm$core$Maybe$Just(
+						A2($elm$core$Basics$max, v, maxIzq));
+				} else {
+					var maxIzq = _v3.a.a;
+					var maxDer = _v3.b.a;
+					return $elm$core$Maybe$Just(
+						A2(
+							$elm$core$Basics$max,
+							v,
+							A2($elm$core$Basics$max, maxIzq, maxDer)));
+				}
+			}
+		}
+	}
+};
+var $elm$core$Basics$min = F2(
+	function (x, y) {
+		return (_Utils_cmp(x, y) < 0) ? x : y;
+	});
+var $author$project$Clase4$encontrarMinimo = function (arbol) {
+	if (arbol.$ === 'Empty') {
+		return $elm$core$Maybe$Nothing;
+	} else {
+		if ((arbol.b.$ === 'Empty') && (arbol.c.$ === 'Empty')) {
+			var v = arbol.a;
+			var _v1 = arbol.b;
+			var _v2 = arbol.c;
+			return $elm$core$Maybe$Just(v);
+		} else {
+			var v = arbol.a;
+			var izq = arbol.b;
+			var der = arbol.c;
+			var _v3 = _Utils_Tuple2(
+				$author$project$Clase4$encontrarMinimo(izq),
+				$author$project$Clase4$encontrarMinimo(der));
+			if (_v3.a.$ === 'Nothing') {
+				if (_v3.b.$ === 'Nothing') {
+					var _v4 = _v3.a;
+					var _v5 = _v3.b;
+					return $elm$core$Maybe$Just(v);
+				} else {
+					var _v7 = _v3.a;
+					var minDer = _v3.b.a;
+					return $elm$core$Maybe$Just(
+						A2($elm$core$Basics$min, v, minDer));
+				}
+			} else {
+				if (_v3.b.$ === 'Nothing') {
+					var minIzq = _v3.a.a;
+					var _v6 = _v3.b;
+					return $elm$core$Maybe$Just(
+						A2($elm$core$Basics$min, v, minIzq));
+				} else {
+					var minIzq = _v3.a.a;
+					var minDer = _v3.b.a;
+					return $elm$core$Maybe$Just(
+						A2(
+							$elm$core$Basics$min,
+							v,
+							A2($elm$core$Basics$min, minIzq, minDer)));
+				}
+			}
+		}
+	}
+};
+var $elm_explorations$test$Test$Runner$Failure$Equality = F2(
+	function (a, b) {
+		return {$: 'Equality', a: a, b: b};
+	});
+var $elm$core$String$contains = _String_contains;
+var $elm_explorations$test$Test$Expectation$Pass = function (a) {
+	return {$: 'Pass', a: a};
+};
+var $elm_explorations$test$Expect$pass = $elm_explorations$test$Test$Expectation$Pass(
+	{distributionReport: $elm_explorations$test$Test$Distribution$NoDistribution});
+var $elm_explorations$test$Test$Internal$toString = _Debug_toString;
+var $elm_explorations$test$Expect$testWith = F5(
+	function (makeReason, label, runTest, expected, actual) {
+		return A2(runTest, actual, expected) ? $elm_explorations$test$Expect$pass : $elm_explorations$test$Test$Expectation$fail(
+			{
+				description: label,
+				reason: A2(
+					makeReason,
+					$elm_explorations$test$Test$Internal$toString(expected),
+					$elm_explorations$test$Test$Internal$toString(actual))
+			});
+	});
+var $elm$core$String$toInt = _String_toInt;
+var $elm_explorations$test$Expect$equateWith = F4(
+	function (reason, comparison, b, a) {
+		var isJust = function (x) {
+			if (x.$ === 'Just') {
+				return true;
+			} else {
+				return false;
+			}
+		};
+		var isFloat = function (x) {
+			return isJust(
+				$elm$core$String$toFloat(x)) && (!isJust(
+				$elm$core$String$toInt(x)));
+		};
+		var usesFloats = isFloat(
+			$elm_explorations$test$Test$Internal$toString(a)) || isFloat(
+			$elm_explorations$test$Test$Internal$toString(b));
+		var floatError = A2($elm$core$String$contains, reason, 'not') ? 'Do not use Expect.notEqual with floats. Use Expect.notWithin instead.' : 'Do not use Expect.equal with floats. Use Expect.within instead.';
+		return usesFloats ? $elm_explorations$test$Expect$fail(floatError) : A5($elm_explorations$test$Expect$testWith, $elm_explorations$test$Test$Runner$Failure$Equality, reason, comparison, b, a);
+	});
+var $elm_explorations$test$Expect$equal = A2($elm_explorations$test$Expect$equateWith, 'Expect.equal', $elm$core$Basics$eq);
+var $author$project$Clase4$esBST = function (arbol) {
+	var esConLimites = F3(
+		function (lower, upper, tree) {
+			if (tree.$ === 'Empty') {
+				return true;
+			} else {
+				var v = tree.a;
+				var left = tree.b;
+				var right = tree.c;
+				var cumpleUpper = function () {
+					if (upper.$ === 'Nothing') {
+						return true;
+					} else {
+						var up = upper.a;
+						return _Utils_cmp(v, up) < 0;
+					}
+				}();
+				var cumpleLower = function () {
+					if (lower.$ === 'Nothing') {
+						return true;
+					} else {
+						var low = lower.a;
+						return _Utils_cmp(low, v) < 0;
+					}
+				}();
+				return cumpleLower && (cumpleUpper && (A3(
+					esConLimites,
+					lower,
+					$elm$core$Maybe$Just(v),
+					left) && A3(
+					esConLimites,
+					$elm$core$Maybe$Just(v),
+					upper,
+					right)));
+			}
+		});
+	return A3(esConLimites, $elm$core$Maybe$Nothing, $elm$core$Maybe$Nothing, arbol);
+};
+var $author$project$Clase4$esHoja = function (arbol) {
+	if (((arbol.$ === 'Node') && (arbol.b.$ === 'Empty')) && (arbol.c.$ === 'Empty')) {
+		var _v1 = arbol.b;
+		var _v2 = arbol.c;
+		return true;
+	} else {
+		return false;
+	}
+};
+var $author$project$Clase4$esVacio = function (arbol) {
+	if (arbol.$ === 'Empty') {
+		return true;
+	} else {
+		return false;
+	}
+};
+var $elm$core$Basics$abs = function (n) {
+	return (n < 0) ? (-n) : n;
+};
+var $author$project$Clase4$estaBalanceado = function (arbol) {
+	if (arbol.$ === 'Empty') {
+		return true;
+	} else {
+		var izq = arbol.b;
+		var der = arbol.c;
+		var alturaIzq = $author$project$Clase4$altura(izq);
+		var alturaDer = $author$project$Clase4$altura(der);
+		return ($elm$core$Basics$abs(alturaIzq - alturaDer) <= 1) && ($author$project$Clase4$estaBalanceado(izq) && $author$project$Clase4$estaBalanceado(der));
+	}
+};
+var $author$project$Clase4$foldArbol = F3(
+	function (funcion, acumulador, arbol) {
+		if (arbol.$ === 'Empty') {
+			return acumulador;
+		} else {
+			var v = arbol.a;
+			var izq = arbol.b;
+			var der = arbol.c;
+			var acumuladorIzq = A3($author$project$Clase4$foldArbol, funcion, acumulador, izq);
+			var acumuladorDer = A3($author$project$Clase4$foldArbol, funcion, acumuladorIzq, der);
+			return A2(funcion, v, acumuladorDer);
+		}
+	});
+var $author$project$Clase4$hijoIzquierdo = function (arbol) {
+	if (arbol.$ === 'Empty') {
+		return $elm$core$Maybe$Nothing;
+	} else {
+		if (arbol.b.$ === 'Empty') {
+			var _v1 = arbol.b;
+			return $elm$core$Maybe$Nothing;
+		} else {
+			var izq = arbol.b;
+			return $elm$core$Maybe$Just(izq);
+		}
+	}
+};
+var $author$project$Clase4$inorder = function (arbol) {
+	if (arbol.$ === 'Empty') {
+		return _List_Nil;
+	} else {
+		var v = arbol.a;
+		var izq = arbol.b;
+		var der = arbol.c;
+		return _Utils_ap(
+			$author$project$Clase4$inorder(izq),
+			_Utils_ap(
+				_List_fromArray(
+					[v]),
+				$author$project$Clase4$inorder(der)));
+	}
+};
+var $author$project$Clase4$insertarBST = F2(
+	function (valor, arbol) {
+		if (arbol.$ === 'Empty') {
+			return $elm$core$Result$Ok(
+				A3($author$project$Clase4$Node, valor, $author$project$Clase4$Empty, $author$project$Clase4$Empty));
+		} else {
+			var v = arbol.a;
+			var izq = arbol.b;
+			var der = arbol.c;
+			if (_Utils_cmp(valor, v) < 0) {
+				var _v1 = A2($author$project$Clase4$insertarBST, valor, izq);
+				if (_v1.$ === 'Ok') {
+					var nuevoIzq = _v1.a;
+					return $elm$core$Result$Ok(
+						A3($author$project$Clase4$Node, v, nuevoIzq, der));
+				} else {
+					var mensajeError = _v1.a;
+					return $elm$core$Result$Err(mensajeError);
+				}
+			} else {
+				if (_Utils_cmp(valor, v) > 0) {
+					var _v2 = A2($author$project$Clase4$insertarBST, valor, der);
+					if (_v2.$ === 'Ok') {
+						var nuevoDer = _v2.a;
+						return $elm$core$Result$Ok(
+							A3($author$project$Clase4$Node, v, izq, nuevoDer));
+					} else {
+						var mensajeError = _v2.a;
+						return $elm$core$Result$Err(mensajeError);
+					}
+				} else {
+					return $elm$core$Result$Err('El valor ya existe en el árbol');
+				}
+			}
+		}
+	});
+var $author$project$Clase4$mapArbol = F2(
+	function (funcion, arbol) {
+		if (arbol.$ === 'Empty') {
+			return $author$project$Clase4$Empty;
+		} else {
+			var v = arbol.a;
+			var izq = arbol.b;
+			var der = arbol.c;
+			return A3(
+				$author$project$Clase4$Node,
+				funcion(v),
+				A2($author$project$Clase4$mapArbol, funcion, izq),
+				A2($author$project$Clase4$mapArbol, funcion, der));
+		}
+	});
+var $author$project$Clase4$maximo = function (arbol) {
+	if (arbol.$ === 'Empty') {
+		return 0;
+	} else {
+		if (arbol.b.$ === 'Empty') {
+			if (arbol.c.$ === 'Empty') {
+				var v = arbol.a;
+				var _v1 = arbol.b;
+				var _v2 = arbol.c;
+				return v;
+			} else {
+				var v = arbol.a;
+				var _v3 = arbol.b;
+				var der = arbol.c;
+				return A2(
+					$elm$core$Basics$max,
+					v,
+					$author$project$Clase4$maximo(der));
+			}
+		} else {
+			if (arbol.c.$ === 'Empty') {
+				var v = arbol.a;
+				var izq = arbol.b;
+				var _v4 = arbol.c;
+				return A2(
+					$elm$core$Basics$max,
+					v,
+					$author$project$Clase4$maximo(izq));
+			} else {
+				var v = arbol.a;
+				var izq = arbol.b;
+				var der = arbol.c;
+				return A2(
+					$elm$core$Basics$max,
+					v,
+					A2(
+						$elm$core$Basics$max,
+						$author$project$Clase4$maximo(izq),
+						$author$project$Clase4$maximo(der)));
+			}
+		}
+	}
+};
+var $author$project$Clase4$maybeAResult = F2(
+	function (mensajeError, maybe) {
+		if (maybe.$ === 'Just') {
+			var valor = maybe.a;
+			return $elm$core$Result$Ok(valor);
+		} else {
+			return $elm$core$Result$Err(mensajeError);
+		}
+	});
+var $author$project$Clase4$minimo = function (arbol) {
+	if (arbol.$ === 'Empty') {
+		return 0;
+	} else {
+		if (arbol.b.$ === 'Empty') {
+			if (arbol.c.$ === 'Empty') {
+				var v = arbol.a;
+				var _v1 = arbol.b;
+				var _v2 = arbol.c;
+				return v;
+			} else {
+				var v = arbol.a;
+				var _v3 = arbol.b;
+				var der = arbol.c;
+				return A2(
+					$elm$core$Basics$min,
+					v,
+					$author$project$Clase4$minimo(der));
+			}
+		} else {
+			if (arbol.c.$ === 'Empty') {
+				var v = arbol.a;
+				var izq = arbol.b;
+				var _v4 = arbol.c;
+				return A2(
+					$elm$core$Basics$min,
+					v,
+					$author$project$Clase4$minimo(izq));
+			} else {
+				var v = arbol.a;
+				var izq = arbol.b;
+				var der = arbol.c;
+				return A2(
+					$elm$core$Basics$min,
+					v,
+					A2(
+						$elm$core$Basics$min,
+						$author$project$Clase4$minimo(izq),
+						$author$project$Clase4$minimo(der)));
+			}
+		}
+	}
+};
+var $elm$core$Maybe$andThen = F2(
+	function (callback, maybeValue) {
+		if (maybeValue.$ === 'Just') {
+			var value = maybeValue.a;
+			return callback(value);
+		} else {
+			return $elm$core$Maybe$Nothing;
+		}
+	});
+var $author$project$Clase4$nietoIzquierdoIzquierdo = function (arbol) {
+	return A2(
+		$elm$core$Maybe$andThen,
+		$author$project$Clase4$hijoIzquierdo,
+		$author$project$Clase4$hijoIzquierdo(arbol));
+};
+var $author$project$Clase4$obtenerMinimo = function (arbol) {
+	if (arbol.$ === 'Empty') {
+		return $elm$core$Result$Err('No hay mínimo en un árbol vacío');
+	} else {
+		var _v1 = $author$project$Clase4$encontrarMinimo(arbol);
+		if (_v1.$ === 'Just') {
+			var valorMinimo = _v1.a;
+			return $elm$core$Result$Ok(valorMinimo);
+		} else {
+			return $elm$core$Result$Err('El mínimo no se pudo encontrar');
+		}
+	}
+};
+var $author$project$Clase4$obtenerRaiz = function (arbol) {
+	if (arbol.$ === 'Empty') {
+		return $elm$core$Result$Err('No se puede obtener la raíz de un árbol vacío');
+	} else {
+		var v = arbol.a;
+		return $elm$core$Result$Ok(v);
+	}
+};
+var $author$project$Clase4$postorder = function (arbol) {
+	if (arbol.$ === 'Empty') {
+		return _List_Nil;
+	} else {
+		var v = arbol.a;
+		var izq = arbol.b;
+		var der = arbol.c;
+		return _Utils_ap(
+			$author$project$Clase4$postorder(izq),
+			_Utils_ap(
+				$author$project$Clase4$postorder(der),
+				_List_fromArray(
+					[v])));
+	}
+};
+var $author$project$Clase4$preorder = function (arbol) {
+	if (arbol.$ === 'Empty') {
+		return _List_Nil;
+	} else {
+		var v = arbol.a;
+		var izq = arbol.b;
+		var der = arbol.c;
+		return _Utils_ap(
+			_List_fromArray(
+				[v]),
+			_Utils_ap(
+				$author$project$Clase4$preorder(izq),
+				$author$project$Clase4$preorder(der)));
+	}
+};
+var $author$project$Clase4$raiz = function (arbol) {
+	if (arbol.$ === 'Empty') {
+		return $elm$core$Maybe$Nothing;
+	} else {
+		var v = arbol.a;
+		return $elm$core$Maybe$Just(v);
+	}
+};
+var $author$project$Clase4$resultAMaybe = function (result) {
+	if (result.$ === 'Ok') {
+		var valor = result.a;
+		return $elm$core$Maybe$Just(valor);
+	} else {
+		return $elm$core$Maybe$Nothing;
+	}
+};
+var $author$project$Clase4$seguirCamino = F2(
+	function (camino, arbol) {
+		seguirCamino:
+		while (true) {
+			if (arbol.$ === 'Empty') {
+				return $elm$core$Result$Err('Camino inválido');
+			} else {
+				var v = arbol.a;
+				var izq = arbol.b;
+				var der = arbol.c;
+				if (!camino.b) {
+					return $elm$core$Result$Ok(v);
+				} else {
+					if (camino.a.$ === 'Izquierda') {
+						var _v2 = camino.a;
+						var resto = camino.b;
+						var $temp$camino = resto,
+							$temp$arbol = izq;
+						camino = $temp$camino;
+						arbol = $temp$arbol;
+						continue seguirCamino;
+					} else {
+						var _v3 = camino.a;
+						var resto = camino.b;
+						var $temp$camino = resto,
+							$temp$arbol = der;
+						camino = $temp$camino;
+						arbol = $temp$arbol;
+						continue seguirCamino;
+					}
+				}
+			}
+		}
+	});
+var $author$project$Clase4$sumarArbol = function (arbol) {
+	if (arbol.$ === 'Empty') {
+		return 0;
+	} else {
+		var v = arbol.a;
+		var izq = arbol.b;
+		var der = arbol.c;
+		return (v + $author$project$Clase4$sumarArbol(izq)) + $author$project$Clase4$sumarArbol(der);
+	}
+};
+var $author$project$Clase4$tamaño = function (arbol) {
+	if (arbol.$ === 'Empty') {
+		return 0;
+	} else {
+		var left = arbol.b;
+		var right = arbol.c;
+		return ($author$project$Clase4$tamaño(left) + $author$project$Clase4$tamaño(right)) + 1;
+	}
+};
+var $elm_explorations$test$Test$Internal$blankDescriptionFailure = $elm_explorations$test$Test$Internal$failNow(
+	{
+		description: 'This test has a blank description. Let\'s give it a useful one!',
+		reason: $elm_explorations$test$Test$Runner$Failure$Invalid($elm_explorations$test$Test$Runner$Failure$BadDescription)
+	});
+var $elm_explorations$test$Test$test = F2(
+	function (untrimmedDesc, thunk) {
+		var desc = $elm$core$String$trim(untrimmedDesc);
+		return $elm$core$String$isEmpty(desc) ? $elm_explorations$test$Test$Internal$blankDescriptionFailure : A2(
+			$elm_explorations$test$Test$Internal$ElmTestVariant__Labeled,
+			desc,
+			$elm_explorations$test$Test$Internal$ElmTestVariant__UnitTest(
+				function (_v0) {
+					return _List_fromArray(
+						[
+							thunk(_Utils_Tuple0)
+						]);
+				}));
+	});
+var $author$project$Clase4$validarBST = function (arbol) {
+	return $author$project$Clase4$esBST(arbol) ? $elm$core$Result$Ok(arbol) : $elm$core$Result$Err('El árbol no es un BST válido');
+};
+var $author$project$Clase4$validarNoVacio = function (arbol) {
+	if (arbol.$ === 'Empty') {
+		return $elm$core$Result$Err('El árbol está vacío');
+	} else {
+		return $elm$core$Result$Ok(arbol);
+	}
+};
+var $author$project$Clase4Test$suite = A2(
+	$elm_explorations$test$Test$describe,
+	'Clase 4: Pattern Matching y Mónadas con Árboles Binarios',
+	_List_fromArray(
+		[
+			A2(
+			$elm_explorations$test$Test$describe,
+			'Parte 0: Construcción de Árboles',
+			_List_fromArray(
+				[
+					A2(
+					$elm_explorations$test$Test$test,
+					'2. Es Vacío - árbol vacío',
+					function (_v0) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							true,
+							$author$project$Clase4$esVacio($author$project$Clase4$Empty));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'2. Es Vacío - árbol con nodo',
+					function (_v1) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							false,
+							$author$project$Clase4$esVacio(
+								A3($author$project$Clase4$Node, 5, $author$project$Clase4$Empty, $author$project$Clase4$Empty)));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'3. Es Hoja - nodo sin hijos',
+					function (_v2) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							true,
+							$author$project$Clase4$esHoja(
+								A3($author$project$Clase4$Node, 5, $author$project$Clase4$Empty, $author$project$Clase4$Empty)));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'3. Es Hoja - nodo con hijo izquierdo',
+					function (_v3) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							false,
+							$author$project$Clase4$esHoja(
+								A3(
+									$author$project$Clase4$Node,
+									5,
+									A3($author$project$Clase4$Node, 3, $author$project$Clase4$Empty, $author$project$Clase4$Empty),
+									$author$project$Clase4$Empty)));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'3. Es Hoja - árbol vacío no es hoja',
+					function (_v4) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							false,
+							$author$project$Clase4$esHoja($author$project$Clase4$Empty));
+					})
+				])),
+			A2(
+			$elm_explorations$test$Test$describe,
+			'Parte 1: Pattern Matching con Árboles',
+			_List_fromArray(
+				[
+					A2(
+					$elm_explorations$test$Test$test,
+					'4. Tamaño - árbol vacío',
+					function (_v5) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							0,
+							$author$project$Clase4$tamaño($author$project$Clase4$Empty));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'4. Tamaño - hoja',
+					function (_v6) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							1,
+							$author$project$Clase4$tamaño(
+								A3($author$project$Clase4$Node, 5, $author$project$Clase4$Empty, $author$project$Clase4$Empty)));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'4. Tamaño - árbol pequeño',
+					function (_v7) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							3,
+							$author$project$Clase4$tamaño($author$project$Clase4$arbolPequeno));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'5. Altura - árbol vacío',
+					function (_v8) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							0,
+							$author$project$Clase4$altura($author$project$Clase4$Empty));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'5. Altura - hoja',
+					function (_v9) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							1,
+							$author$project$Clase4$altura(
+								A3($author$project$Clase4$Node, 5, $author$project$Clase4$Empty, $author$project$Clase4$Empty)));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'5. Altura - árbol pequeño',
+					function (_v10) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							2,
+							$author$project$Clase4$altura($author$project$Clase4$arbolPequeno));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'6. Suma de Valores - árbol vacío',
+					function (_v11) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							0,
+							$author$project$Clase4$sumarArbol($author$project$Clase4$Empty));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'6. Suma de Valores - árbol con valores',
+					function (_v12) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							15,
+							$author$project$Clase4$sumarArbol(
+								A3(
+									$author$project$Clase4$Node,
+									5,
+									A3($author$project$Clase4$Node, 3, $author$project$Clase4$Empty, $author$project$Clase4$Empty),
+									A3($author$project$Clase4$Node, 7, $author$project$Clase4$Empty, $author$project$Clase4$Empty))));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'7. Contiene Valor - valor presente',
+					function (_v13) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							true,
+							A2($author$project$Clase4$contiene, 5, $author$project$Clase4$arbolPequeno));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'7. Contiene Valor - valor ausente',
+					function (_v14) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							false,
+							A2($author$project$Clase4$contiene, 10, $author$project$Clase4$arbolPequeno));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'8. Contar Hojas - árbol vacío',
+					function (_v15) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							0,
+							$author$project$Clase4$contarHojas($author$project$Clase4$Empty));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'8. Contar Hojas - una hoja',
+					function (_v16) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							1,
+							$author$project$Clase4$contarHojas(
+								A3($author$project$Clase4$Node, 5, $author$project$Clase4$Empty, $author$project$Clase4$Empty)));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'8. Contar Hojas - árbol pequeño',
+					function (_v17) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							2,
+							$author$project$Clase4$contarHojas($author$project$Clase4$arbolPequeno));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'9. Mínimo sin Maybe - árbol vacío',
+					function (_v18) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							0,
+							$author$project$Clase4$minimo($author$project$Clase4$Empty));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'9. Mínimo sin Maybe - árbol pequeño',
+					function (_v19) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							1,
+							$author$project$Clase4$minimo($author$project$Clase4$arbolPequeno));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'10. Máximo sin Maybe - árbol vacío',
+					function (_v20) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							0,
+							$author$project$Clase4$maximo($author$project$Clase4$Empty));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'10. Máximo sin Maybe - árbol pequeño',
+					function (_v21) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							5,
+							$author$project$Clase4$maximo($author$project$Clase4$arbolPequeno));
+					})
+				])),
+			A2(
+			$elm_explorations$test$Test$describe,
+			'Parte 2: Introducción a Maybe',
+			_List_fromArray(
+				[
+					A2(
+					$elm_explorations$test$Test$test,
+					'11. Buscar - valor presente',
+					function (_v22) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							$elm$core$Maybe$Just(5),
+							A2($author$project$Clase4$buscar, 5, $author$project$Clase4$arbolPequeno));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'11. Buscar - valor ausente',
+					function (_v23) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							$elm$core$Maybe$Nothing,
+							A2($author$project$Clase4$buscar, 10, $author$project$Clase4$arbolPequeno));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'12. Encontrar Mínimo - árbol vacío',
+					function (_v24) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							$elm$core$Maybe$Nothing,
+							$author$project$Clase4$encontrarMinimo($author$project$Clase4$Empty));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'12. Encontrar Mínimo - árbol pequeño',
+					function (_v25) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							$elm$core$Maybe$Just(1),
+							$author$project$Clase4$encontrarMinimo($author$project$Clase4$arbolPequeno));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'13. Encontrar Máximo - árbol vacío',
+					function (_v26) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							$elm$core$Maybe$Nothing,
+							$author$project$Clase4$encontrarMaximo($author$project$Clase4$Empty));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'13. Encontrar Máximo - árbol pequeño',
+					function (_v27) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							$elm$core$Maybe$Just(5),
+							$author$project$Clase4$encontrarMaximo($author$project$Clase4$arbolPequeno));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'14. Buscar Por Predicado - encuentra valor',
+					function (_v28) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							$elm$core$Maybe$Just(5),
+							A2(
+								$author$project$Clase4$buscarPor,
+								function (x) {
+									return x > 3;
+								},
+								$author$project$Clase4$arbolPequeno));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'14. Buscar Por Predicado - no encuentra',
+					function (_v29) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							$elm$core$Maybe$Nothing,
+							A2(
+								$author$project$Clase4$buscarPor,
+								function (x) {
+									return x > 10;
+								},
+								$author$project$Clase4$arbolPequeno));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'15. Raíz - árbol vacío',
+					function (_v30) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							$elm$core$Maybe$Nothing,
+							$author$project$Clase4$raiz($author$project$Clase4$Empty));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'15. Raíz - árbol con nodo',
+					function (_v31) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							$elm$core$Maybe$Just(5),
+							$author$project$Clase4$raiz(
+								A3($author$project$Clase4$Node, 5, $author$project$Clase4$Empty, $author$project$Clase4$Empty)));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'16. Hijo Izquierdo - árbol vacío',
+					function (_v32) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							$elm$core$Maybe$Nothing,
+							$author$project$Clase4$hijoIzquierdo($author$project$Clase4$Empty));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'16. Hijo Izquierdo - con hijo',
+					function (_v33) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							$elm$core$Maybe$Just(
+								A3($author$project$Clase4$Node, 3, $author$project$Clase4$Empty, $author$project$Clase4$Empty)),
+							$author$project$Clase4$hijoIzquierdo(
+								A3(
+									$author$project$Clase4$Node,
+									5,
+									A3($author$project$Clase4$Node, 3, $author$project$Clase4$Empty, $author$project$Clase4$Empty),
+									$author$project$Clase4$Empty)));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'17. Nieto Izquierdo Izquierdo',
+					function (_v34) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							$elm$core$Maybe$Just(
+								A3($author$project$Clase4$Node, 3, $author$project$Clase4$Empty, $author$project$Clase4$Empty)),
+							$author$project$Clase4$nietoIzquierdoIzquierdo($author$project$Clase4$arbolMediano));
+					})
+				])),
+			A2(
+			$elm_explorations$test$Test$describe,
+			'Parte 3: Result para Validaciones',
+			_List_fromArray(
+				[
+					A2(
+					$elm_explorations$test$Test$test,
+					'19. Validar No Vacío - árbol vacío',
+					function (_v35) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							$elm$core$Result$Err('El árbol está vacío'),
+							$author$project$Clase4$validarNoVacio($author$project$Clase4$Empty));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'19. Validar No Vacío - árbol con nodo',
+					function (_v36) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							$elm$core$Result$Ok(
+								A3($author$project$Clase4$Node, 5, $author$project$Clase4$Empty, $author$project$Clase4$Empty)),
+							$author$project$Clase4$validarNoVacio(
+								A3($author$project$Clase4$Node, 5, $author$project$Clase4$Empty, $author$project$Clase4$Empty)));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'20. Obtener Raíz - árbol vacío',
+					function (_v37) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							$elm$core$Result$Err('No se puede obtener la raíz de un árbol vacío'),
+							$author$project$Clase4$obtenerRaiz($author$project$Clase4$Empty));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'20. Obtener Raíz - árbol con nodo',
+					function (_v38) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							$elm$core$Result$Ok(5),
+							$author$project$Clase4$obtenerRaiz(
+								A3($author$project$Clase4$Node, 5, $author$project$Clase4$Empty, $author$project$Clase4$Empty)));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'21. Dividir - árbol vacío',
+					function (_v39) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							$elm$core$Result$Err('No se puede dividir un árbol vacío'),
+							$author$project$Clase4$dividir($author$project$Clase4$Empty));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'21. Dividir - árbol con nodos',
+					function (_v40) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							$elm$core$Result$Ok(
+								_Utils_Tuple3(
+									5,
+									A3($author$project$Clase4$Node, 3, $author$project$Clase4$Empty, $author$project$Clase4$Empty),
+									A3($author$project$Clase4$Node, 7, $author$project$Clase4$Empty, $author$project$Clase4$Empty))),
+							$author$project$Clase4$dividir(
+								A3(
+									$author$project$Clase4$Node,
+									5,
+									A3($author$project$Clase4$Node, 3, $author$project$Clase4$Empty, $author$project$Clase4$Empty),
+									A3($author$project$Clase4$Node, 7, $author$project$Clase4$Empty, $author$project$Clase4$Empty))));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'22. Obtener Mínimo - árbol vacío',
+					function (_v41) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							$elm$core$Result$Err('No hay mínimo en un árbol vacío'),
+							$author$project$Clase4$obtenerMinimo($author$project$Clase4$Empty));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'22. Obtener Mínimo - árbol pequeño',
+					function (_v42) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							$elm$core$Result$Ok(1),
+							$author$project$Clase4$obtenerMinimo($author$project$Clase4$arbolPequeno));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'23. Es BST - BST válido',
+					function (_v43) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							true,
+							$author$project$Clase4$esBST(
+								A3(
+									$author$project$Clase4$Node,
+									5,
+									A3($author$project$Clase4$Node, 3, $author$project$Clase4$Empty, $author$project$Clase4$Empty),
+									A3($author$project$Clase4$Node, 7, $author$project$Clase4$Empty, $author$project$Clase4$Empty))));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'23. Es BST - no es BST',
+					function (_v44) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							false,
+							$author$project$Clase4$esBST(
+								A3(
+									$author$project$Clase4$Node,
+									5,
+									A3($author$project$Clase4$Node, 7, $author$project$Clase4$Empty, $author$project$Clase4$Empty),
+									A3($author$project$Clase4$Node, 3, $author$project$Clase4$Empty, $author$project$Clase4$Empty))));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'24. Insertar en BST - insertar en vacío',
+					function (_v45) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							$elm$core$Result$Ok(
+								A3($author$project$Clase4$Node, 5, $author$project$Clase4$Empty, $author$project$Clase4$Empty)),
+							A2($author$project$Clase4$insertarBST, 5, $author$project$Clase4$Empty));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'24. Insertar en BST - insertar duplicado',
+					function (_v46) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							$elm$core$Result$Err('El valor ya existe en el árbol'),
+							A2(
+								$author$project$Clase4$insertarBST,
+								3,
+								A3($author$project$Clase4$Node, 3, $author$project$Clase4$Empty, $author$project$Clase4$Empty)));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'25. Buscar en BST - encontrado',
+					function (_v47) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							$elm$core$Result$Ok(3),
+							A2($author$project$Clase4$buscarEnBST, 3, $author$project$Clase4$arbolPequeno));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'25. Buscar en BST - no encontrado',
+					function (_v48) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							$elm$core$Result$Err('El valor no se encuentra en el árbol'),
+							A2($author$project$Clase4$buscarEnBST, 10, $author$project$Clase4$arbolPequeno));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'26. Validar BST - válido',
+					function (_v49) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							$elm$core$Result$Ok($author$project$Clase4$arbolPequeno),
+							$author$project$Clase4$validarBST($author$project$Clase4$arbolPequeno));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'26. Validar BST - inválido',
+					function (_v50) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							$elm$core$Result$Err('El árbol no es un BST válido'),
+							$author$project$Clase4$validarBST(
+								A3(
+									$author$project$Clase4$Node,
+									5,
+									A3($author$project$Clase4$Node, 7, $author$project$Clase4$Empty, $author$project$Clase4$Empty),
+									A3($author$project$Clase4$Node, 3, $author$project$Clase4$Empty, $author$project$Clase4$Empty))));
+					})
+				])),
+			A2(
+			$elm_explorations$test$Test$describe,
+			'Parte 4: Combinando Maybe y Result',
+			_List_fromArray(
+				[
+					A2(
+					$elm_explorations$test$Test$test,
+					'27. Maybe a Result - Nothing',
+					function (_v51) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							$elm$core$Result$Err('Error personalizado'),
+							A2($author$project$Clase4$maybeAResult, 'Error personalizado', $elm$core$Maybe$Nothing));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'27. Maybe a Result - Just',
+					function (_v52) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							$elm$core$Result$Ok(5),
+							A2(
+								$author$project$Clase4$maybeAResult,
+								'Error',
+								$elm$core$Maybe$Just(5)));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'28. Result a Maybe - Err',
+					function (_v53) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							$elm$core$Maybe$Nothing,
+							$author$project$Clase4$resultAMaybe(
+								$elm$core$Result$Err('algo')));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'28. Result a Maybe - Ok',
+					function (_v54) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							$elm$core$Maybe$Just(5),
+							$author$project$Clase4$resultAMaybe(
+								$elm$core$Result$Ok(5)));
+					})
+				])),
+			A2(
+			$elm_explorations$test$Test$describe,
+			'Parte 5: Desafíos Avanzados',
+			_List_fromArray(
+				[
+					A2(
+					$elm_explorations$test$Test$test,
+					'32. Inorder - árbol pequeño',
+					function (_v55) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							_List_fromArray(
+								[1, 3, 5]),
+							$author$project$Clase4$inorder($author$project$Clase4$arbolPequeno));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'33. Preorder - árbol pequeño',
+					function (_v56) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							_List_fromArray(
+								[3, 1, 5]),
+							$author$project$Clase4$preorder($author$project$Clase4$arbolPequeno));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'34. Postorder - árbol pequeño',
+					function (_v57) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							_List_fromArray(
+								[1, 5, 3]),
+							$author$project$Clase4$postorder($author$project$Clase4$arbolPequeno));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'35. Map sobre Árbol',
+					function (_v58) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							A3(
+								$author$project$Clase4$Node,
+								6,
+								A3($author$project$Clase4$Node, 2, $author$project$Clase4$Empty, $author$project$Clase4$Empty),
+								A3($author$project$Clase4$Node, 10, $author$project$Clase4$Empty, $author$project$Clase4$Empty)),
+							A2(
+								$author$project$Clase4$mapArbol,
+								function (x) {
+									return x * 2;
+								},
+								$author$project$Clase4$arbolPequeno));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'37. Fold sobre Árbol',
+					function (_v59) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							9,
+							A3($author$project$Clase4$foldArbol, $elm$core$Basics$add, 0, $author$project$Clase4$arbolPequeno));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'40. Está Balanceado - árbol balanceado',
+					function (_v60) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							true,
+							$author$project$Clase4$estaBalanceado($author$project$Clase4$arbolPequeno));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'42. Encontrar Camino - hijo izquierdo',
+					function (_v61) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							$elm$core$Result$Ok(
+								_List_fromArray(
+									[$author$project$Clase4$Izquierda])),
+							A2($author$project$Clase4$encontrarCamino, 1, $author$project$Clase4$arbolPequeno));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'42. Encontrar Camino - hijo derecho',
+					function (_v62) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							$elm$core$Result$Ok(
+								_List_fromArray(
+									[$author$project$Clase4$Derecha])),
+							A2($author$project$Clase4$encontrarCamino, 5, $author$project$Clase4$arbolPequeno));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'42. Encontrar Camino - valor no existe',
+					function (_v63) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							$elm$core$Result$Err('El valor no existe en el árbol'),
+							A2($author$project$Clase4$encontrarCamino, 10, $author$project$Clase4$arbolPequeno));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'43. Seguir Camino - izquierda',
+					function (_v64) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							$elm$core$Result$Ok(1),
+							A2(
+								$author$project$Clase4$seguirCamino,
+								_List_fromArray(
+									[$author$project$Clase4$Izquierda]),
+								$author$project$Clase4$arbolPequeno));
+					}),
+					A2(
+					$elm_explorations$test$Test$test,
+					'43. Seguir Camino - camino inválido',
+					function (_v65) {
+						return A2(
+							$elm_explorations$test$Expect$equal,
+							$elm$core$Result$Err('Camino inválido'),
+							A2(
+								$author$project$Clase4$seguirCamino,
+								_List_fromArray(
+									[$author$project$Clase4$Izquierda, $author$project$Clase4$Izquierda]),
+								$author$project$Clase4$arbolPequeno));
+					})
+				]))
+		]));
 var $elm_explorations$test$Test$todo = function (desc) {
 	return $elm_explorations$test$Test$Internal$failNow(
 		{description: desc, reason: $elm_explorations$test$Test$Runner$Failure$TODO});
@@ -7611,14 +9098,20 @@ var $author$project$Test$Generated$Main$main = A2(
 	{
 		globs: _List_Nil,
 		paths: _List_fromArray(
-			['C:\\Users\\Samu\\Documents\\2do Año\\Paradigmas de Programación\\paradigmaUAP2025\\funcional\\ejercicios\\ejercicio4\\tests\\Example.elm']),
+			['C:\\Users\\Samu\\Documents\\2do Año\\Paradigmas de Programación\\paradigmaUAP2025\\funcional\\ejercicios\\ejercicio4\\tests\\Clase4Test.elm', 'C:\\Users\\Samu\\Documents\\2do Año\\Paradigmas de Programación\\paradigmaUAP2025\\funcional\\ejercicios\\ejercicio4\\tests\\Example.elm']),
 		processes: 8,
 		report: $author$project$Test$Reporter$Reporter$ConsoleReport($author$project$Console$Text$UseColor),
 		runs: 100,
-		seed: 202359092776883
+		seed: 122097987328013
 	},
 	_List_fromArray(
 		[
+			_Utils_Tuple2(
+			'Clase4Test',
+			_List_fromArray(
+				[
+					$author$project$Test$Runner$Node$check($author$project$Clase4Test$suite)
+				])),
 			_Utils_Tuple2(
 			'Example',
 			_List_fromArray(
@@ -7629,7 +9122,7 @@ var $author$project$Test$Generated$Main$main = A2(
 _Platform_export({'Test':{'Generated':{'Main':{'init':$author$project$Test$Generated$Main$main($elm$json$Json$Decode$int)(0)}}}});}(this));
 return this.Elm;
 })({});
-var pipeFilename = "\\\\.\\pipe\\elm_test-15368-1";
+var pipeFilename = "\\\\.\\pipe\\elm_test-15664-1";
 var net = require('net'),
   client = net.createConnection(pipeFilename);
 

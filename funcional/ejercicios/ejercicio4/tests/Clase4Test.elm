@@ -151,6 +151,29 @@ suite =
             , test "23. Es BST - no es BST" <|
                 \_ ->
                     Expect.equal False (esBST (Node 5 (Node 7 Empty Empty) (Node 3 Empty Empty)))
+            , test "24. Insertar en BST - insertar en vacío" <|
+                \_ ->
+                    Expect.equal (Ok (Node 5 Empty Empty)) (insertarBST 5 Empty)
+
+            , test "24. Insertar en BST - insertar duplicado" <|
+                \_ ->
+                    Expect.equal (Err "El valor ya existe en el árbol") (insertarBST 3 (Node 3 Empty Empty))
+
+            , test "25. Buscar en BST - encontrado" <|
+                \_ ->
+                    Expect.equal (Ok 3) (buscarEnBST 3 arbolPequeno)
+
+            , test "25. Buscar en BST - no encontrado" <|
+                \_ ->
+                    Expect.equal (Err "El valor no se encuentra en el árbol") (buscarEnBST 10 arbolPequeno)
+
+            , test "26. Validar BST - válido" <|
+                \_ ->
+                    Expect.equal (Ok arbolPequeno) (validarBST arbolPequeno)
+
+            , test "26. Validar BST - inválido" <|
+                \_ ->
+                    Expect.equal (Err "El árbol no es un BST válido") (validarBST (Node 5 (Node 7 Empty Empty) (Node 3 Empty Empty)))
             ]
         , describe "Parte 4: Combinando Maybe y Result"
             [ test "27. Maybe a Result - Nothing" <|

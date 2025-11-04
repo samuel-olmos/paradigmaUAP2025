@@ -1,5 +1,6 @@
 module Test.Generated.Main exposing (main)
 
+import Clase4Test
 import Example
 
 import Test.Reporter.Reporter exposing (Report(..))
@@ -12,15 +13,20 @@ main =
     Test.Runner.Node.run
         { runs = 100
         , report = ConsoleReport UseColor
-        , seed = 202359092776883
+        , seed = 122097987328013
         , processes = 8
         , globs =
             []
         , paths =
-            [ "C:\\Users\\Samu\\Documents\\2do Año\\Paradigmas de Programación\\paradigmaUAP2025\\funcional\\ejercicios\\ejercicio4\\tests\\Example.elm"
+            [ "C:\\Users\\Samu\\Documents\\2do Año\\Paradigmas de Programación\\paradigmaUAP2025\\funcional\\ejercicios\\ejercicio4\\tests\\Clase4Test.elm"
+            , "C:\\Users\\Samu\\Documents\\2do Año\\Paradigmas de Programación\\paradigmaUAP2025\\funcional\\ejercicios\\ejercicio4\\tests\\Example.elm"
             ]
         }
-        [ ( "Example"
+        [ ( "Clase4Test"
+          , [ Test.Runner.Node.check Clase4Test.suite
+            ]
+          )
+        , ( "Example"
           , [ Test.Runner.Node.check Example.suite
             ]
           )
