@@ -13,7 +13,7 @@ main =
     Test.Runner.Node.run
         { runs = 100
         , report = ConsoleReport UseColor
-        , seed = 122097987328013
+        , seed = 52293700833984
         , processes = 8
         , globs =
             []
